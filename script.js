@@ -1,73 +1,59 @@
-const quizData = [
-    {
-        question: "Какой фрукт упал на голову Исааку Ньютону?",
-        options: ["Груша", "Яблоко", "Апельсин", "Банан"],
-        answer: "Яблоко"
-    },
-    {
-        question: "Кто изобрёл лампочку?",
-        options: ["Никола Тесла", "Томас Эдисон", "Александр Белл", "Бенджамин Франклин"],
-        answer: "Томас Эдисон"
-    },
-    {
-        question: "Какая страна подарила США Статую Свободы?",
-        options: ["Великобритания", "Италия", "Франция", "Германия"],
-        answer: "Франция"
-    }
-];
+let timerInterval;
 
-const quizContainer = document.getElementById('quiz');
-const submitButton = document.getElementById('submit');
-const resultContainer = document.getElementById('result');
-
-function loadQuiz() {
-    quizContainer.innerHTML = '';
-    quizData.forEach((q, index) => {
-        const questionEl = document.createElement('div');
-        questionEl.classList.add('question');
-        questionEl.innerText = q.question;
-        quizContainer.appendChild(questionEl);
-
-        const optionsContainer = document.createElement('div');
-        optionsContainer.classList.add('options');
-
-        q.options.forEach(option => {
-            const optionLabel = document.createElement('label');
-            optionLabel.classList.add('option');
-
-            const optionInput = document.createElement('input');
-            optionInput.type = 'radio';
-            optionInput.name = `question${index}`;
-            optionInput.value = option;
-
-            optionLabel.appendChild(optionInput);
-            optionLabel.appendChild(document.createTextNode(option));
-            optionsContainer.appendChild(optionLabel);
-        });
-
-        quizContainer.appendChild(optionsContainer);
-    });
+function startQuiz() {
+  const username = document.getElementById("username").value;
+  if (username.trim() === "") {
+    alert("Пожалуйста, введите ваше имя");
+    return;
+  }
+  document.getElementById("quizContent").style.display = "block";
+  startTimer();
 }
 
-function getResults() {
-    let score = 0;
-    quizData.forEach((q, index) => {
-        const selectedOption = document.querySelector(`input[name="question${index}"]:checked`);
-        if (selectedOption && selectedOption.value === q.answer) {
-            score++;
-        }
-    });
+function startTimer() {
+  let timeRemaining = 180; // 3 минуты в секундах
+  const timerElement = document.getElementById("timer");
 
-    resultContainer.classList.remove('correct', 'wrong');
-    if (score === quizData.length) {
-        resultContainer.classList.add('correct');
-        resultContainer.innerText = `🎉 Отлично! Все ответы правильные! Ваш результат: ${score} из ${quizData.length}`;
-    } else {
-        resultContainer.classList.add('wrong');
-        resultContainer.innerText = `😬 Ваш результат: ${score} из ${quizData.length}. Попробуйте снова!`;
+  timerInterval = setInterval(() => {
+    const minutes = Math.floor(timeRemaining / 60);
+    const seconds = timeRemaining % 60;
+    timerElement.textContent = `Осталось времени: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    timeRemaining--;
+
+    if (timeRemaining < 0) {
+      clearInterval(timerInterval);
+      submitQuiz();
     }
+  }, 1000);
 }
 
-submitButton.addEventListener('click', getResults);
+function submitQuiz() {
+  clearInterval(timerInterval); // Останавливаем таймер
+  const username = document.getElementById("username").value;
+  const inventionsQuiz = document.getElementById("inventionsQuiz");
+  const historyQuiz = document.getElementById("historyQuiz");
+  let totalScore = 0;
+  let totalQuestions = 0;
 
-loadQuiz();
+  [inventionsQuiz, historyQuiz].forEach(quiz => {
+    const answers = quiz.querySelectorAll('input[type="radio"]:checked');
+    totalQuestions += quiz.querySelectorAll('.question').length;
+    answers.forEach(answer => {
+      if (answer.value === 'correct') totalScore++;
+    });
+  });
+
+  // Отображение результата
+  const result = document.getElementById("result");
+  result.textContent = `${username}, вы набрали ${totalScore} из ${totalQuestions} правильных ответов!`;
+  result.className = totalScore >= totalQuestions / 2 ? 'result correct' : 'result incorrect';
+
+  // Подготовка данных для отправки на почту (вместо сервера тут placeholder)
+  sendEmail(username, totalScore, totalQuestions);
+}
+
+// Функция для отправки результатов на почту
+function sendEmail(username, score, totalQuestions) {
+  const mailtoLink = `mailto:andrew.digital.space@gmail.com?subject=Результат квиза&body=${username} набрал ${score} из ${totalQuestions} правильных ответов.`;
+  window.location.href = mailtoLink;
+}
