@@ -1,3 +1,5 @@
+console.log("JavaScript загружен!");
+
 let timerInterval;
 
 function startQuiz() {
