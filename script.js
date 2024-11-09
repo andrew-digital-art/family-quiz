@@ -3,7 +3,7 @@ let timerInterval;
 function startQuiz() {
   const username = document.getElementById("username").value;
   if (username.trim() === "") {
-    alert("Пожалуйста, введите ваше имя");
+    alert("Ты мама или Лена");
     return;
   }
   document.getElementById("quizContent").style.display = "block";
