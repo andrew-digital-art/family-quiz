@@ -5,12 +5,12 @@ let timerInterval;
 function startQuiz() {
   const username = document.getElementById("username").value;
   if (username.trim() === "") {
-    alert("Ты мама или Лена");
+    alert("Пожалуйста, введите ваше имя");
     return;
   }
+  alert(`Здравствуйте, ${username}!`);
   document.getElementById("quizContent").style.display = "block";
   startTimer();
-}
 
 function startTimer() {
   let timeRemaining = 180; // 3 минуты в секундах
