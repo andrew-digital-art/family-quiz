@@ -1,16 +1,6 @@
-console.log("JavaScript загружен!");
-
 let timerInterval;
 
-function startQuiz() {
-  const username = document.getElementById("username").value;
-  if (username.trim() === "") {
-    alert("Пожалуйста, введите ваше имя");
-    return;
-  }
-  alert(`Здравствуйте, ${username}!`);
-  document.getElementById("quizContent").style.display = "block";
-  startTimer();
+window.onload = startTimer; // Запуск таймера при загрузке страницы
 
 function startTimer() {
   let timeRemaining = 180; // 3 минуты в секундах
@@ -31,7 +21,6 @@ function startTimer() {
 
 function submitQuiz() {
   clearInterval(timerInterval); // Останавливаем таймер
-  const username = document.getElementById("username").value;
   const inventionsQuiz = document.getElementById("inventionsQuiz");
   const historyQuiz = document.getElementById("historyQuiz");
   let totalScore = 0;
@@ -45,17 +34,14 @@ function submitQuiz() {
     });
   });
 
-  // Отображение результата
   const result = document.getElementById("result");
-  result.textContent = `${username}, вы набрали ${totalScore} из ${totalQuestions} правильных ответов!`;
+  result.textContent = `Вы набрали ${totalScore} из ${totalQuestions} правильных ответов!`;
   result.className = totalScore >= totalQuestions / 2 ? 'result correct' : 'result incorrect';
 
-  // Подготовка данных для отправки на почту (вместо сервера тут placeholder)
-  sendEmail(username, totalScore, totalQuestions);
+  sendEmail(totalScore, totalQuestions);
 }
 
-// Функция для отправки результатов на почту
-function sendEmail(username, score, totalQuestions) {
-  const mailtoLink = `mailto:andrew.digital.space@gmail.com?subject=Результат квиза&body=${username} набрал ${score} из ${totalQuestions} правильных ответов.`;
+function sendEmail(score, totalQuestions) {
+  const mailtoLink = `mailto:andrew.digital.space@gmail.com?subject=Результат квиза&body=Пользователь набрал ${score} из ${totalQuestions} правильных ответов.`;
   window.location.href = mailtoLink;
 }
