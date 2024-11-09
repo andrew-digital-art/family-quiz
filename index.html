@@ -1,20 +1,72 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Квиз об изобретениях</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Квиз: Изобретения и История</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="quiz-container">
-        <h1>🧠 Квиз об изобретениях</h1>
-        <div id="quiz">
-            <!-- Вопросы будут добавлены динамически через JavaScript -->
+  <div class="quiz-container">
+    <h1>Добро пожаловать в Квиз,<br> Мама или Лена!</h1>
+    <p>Ты Мама или Лена? Напиши, чтобы начать:</p>
+    <input type="text" id="username" placeholder="Ваше имя">
+    <button onclick="startQuiz()">Начать квиз</button>
+
+    <div id="quizContent" style="display:none;">
+      <p id="timer" class="timer">Осталось времени: 3:00</p>
+      
+      <!-- Квиз об изобретениях -->
+      <h1>🧠 Квиз об изобретениях</h1>
+      <img src="https://klona.ua/wp-content/uploads/2020/11/e758a4154072c8ce4545a39a244aa9fdd7e5da769231.jpg" alt="Изобретения" class="quiz-image">
+      <form id="inventionsQuiz" class="quiz-form">
+        <div class="question">
+          <p>1. Кто изобрёл телефон? 📞</p>
+          <label><input type="radio" name="q1" value="incorrect"> Томас Эдисон</label><br>
+          <label><input type="radio" name="q1" value="correct"> Александр Белл</label><br>
+          <label><input type="radio" name="q1" value="incorrect"> Никола Тесла</label>
         </div>
-        <button id="submit">Показать результат</button>
-        <div id="result"></div>
+        <div class="question">
+          <p>2. Кто известен как изобретатель лампы накаливания? 💡</p>
+          <label><input type="radio" name="q2" value="correct"> Томас Эдисон</label><br>
+          <label><input type="radio" name="q2" value="incorrect"> Александр Белл</label><br>
+          <label><input type="radio" name="q2" value="incorrect"> Альберт Эйнштейн</label>
+        </div>
+        <div class="question">
+          <p>3. Кто изобрёл автомобиль с двигателем внутреннего сгорания? 🚗</p>
+          <label><input type="radio" name="q3" value="correct"> Карл Бенц</label><br>
+          <label><input type="radio" name="q3" value="incorrect"> Генри Форд</label><br>
+          <label><input type="radio" name="q3" value="incorrect"> Джеймс Ватт</label>
+        </div>
+      </form>
+
+      <!-- Квиз об истории -->
+      <h1>📜 Квиз об истории</h1>
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiqOBNIwuWkhzMHBifuM4DozHi06qZ9WrbGQ&s" alt="История" class="quiz-image">
+      <form id="historyQuiz" class="quiz-form">
+        <div class="question">
+          <p>1. В каком году началась Первая мировая война? 🌍</p>
+          <label><input type="radio" name="q1" value="incorrect"> 1912</label><br>
+          <label><input type="radio" name="q1" value="correct"> 1914</label><br>
+          <label><input type="radio" name="q1" value="incorrect"> 1916</label>
+        </div>
+        <div class="question">
+          <p>2. Кто был первым президентом США? 🇺🇸</p>
+          <label><input type="radio" name="q2" value="correct"> Джордж Вашингтон</label><br>
+          <label><input type="radio" name="q2" value="incorrect"> Авраам Линкольн</label><br>
+          <label><input type="radio" name="q2" value="incorrect"> Томас Джефферсон</label>
+        </div>
+        <div class="question">
+          <p>3. Какое событие произошло в 1066 году? ⚔️</p>
+          <label><input type="radio" name="q3" value="correct"> Нормандское завоевание Англии</label><br>
+          <label><input type="radio" name="q3" value="incorrect"> Битва при Гастингсе</label><br>
+          <label><input type="radio" name="q3" value="incorrect"> Падение Константинополя</label>
+        </div>
+      </form>
+      <button type="button" onclick="submitQuiz()">Отправить ответы</button>
+      <div id="result" class="result"></div>
     </div>
-    <script src="script.js"></script>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
