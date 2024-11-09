@@ -4,9 +4,86 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Квиз: Изобретения и История</title>
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #f4f4f9;
+      overflow: hidden;
+    }
+
+    .quiz-container {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+    }
+
+    .question {
+      margin-bottom: 15px;
+    }
+
+    .quiz-image {
+      width: 100%;
+      max-width: 150px;
+      margin-bottom: 10px;
+    }
+
+    .timer {
+      color: #e74c3c;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    .result {
+      margin-top: 15px;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    .result.correct {
+      color: green;
+    }
+
+    .result.incorrect {
+      color: red;
+    }
+  </style>
 </head>
 <body>
+
   <div class="quiz-container">
     <p id="timer" class="timer">Осталось времени: 3:00</p>
     
@@ -60,6 +137,56 @@
     <button type="button" onclick="submitQuiz()">Отправить ответы</button>
     <div id="result" class="result"></div>
   </div>
-  <script src="script.js"></script>
+
+  <script>
+    let timerInterval;
+
+    window.onload = startTimer; // Запуск таймера при загрузке страницы
+
+    function startTimer() {
+      let timeRemaining = 180; // 3 минуты в секундах
+      const timerElement = document.getElementById("timer");
+
+      timerInterval = setInterval(() => {
+        const minutes = Math.floor(timeRemaining / 60);
+        const seconds = timeRemaining % 60;
+        timerElement.textContent = `Осталось времени: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        timeRemaining--;
+
+        if (timeRemaining < 0) {
+          clearInterval(timerInterval);
+          submitQuiz();
+        }
+      }, 1000);
+    }
+
+    function submitQuiz() {
+      clearInterval(timerInterval); // Останавливаем таймер
+      const inventionsQuiz = document.getElementById("inventionsQuiz");
+      const historyQuiz = document.getElementById("historyQuiz");
+      let totalScore = 0;
+      let totalQuestions = 0;
+
+      [inventionsQuiz, historyQuiz].forEach(quiz => {
+        const answers = quiz.querySelectorAll('input[type="radio"]:checked');
+        totalQuestions += quiz.querySelectorAll('.question').length;
+        answers.forEach(answer => {
+          if (answer.value === 'correct') totalScore++;
+        });
+      });
+
+      const result = document.getElementById("result");
+      result.textContent = `Вы набрали ${totalScore} из ${totalQuestions} правильных ответов!`;
+      result.className = totalScore >= totalQuestions / 2 ? 'result correct' : 'result incorrect';
+
+      sendEmail(totalScore, totalQuestions);
+    }
+
+    function sendEmail(score, totalQuestions) {
+      const mailtoLink = `mailto:andrew.digital.space@gmail.com?subject=Результат квиза&body=Пользователь набрал ${score} из ${totalQuestions} правильных ответов.`;
+      window.location.href = mailtoLink;
+    }
+  </script>
+
 </body>
 </html>
